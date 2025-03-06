@@ -2,8 +2,16 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import api
-from opencensus.ext.azure.log_exporter import AzureLogHandler
 import os
+from azure.monitor.opentelemetry import configure_azure_monitor
+
+# Configura azure-monitor-opentelemetry con logger_name
+APPLICATIONINSIGHTS_CONNECTION_STRING = os.getenv('APPLICATIONINSIGHTS_CONNECTION_STRING')
+logger_namespace = "my_app_logger" # Define el nombre de tu logger
+configure_azure_monitor(
+    connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING,
+    logger_name=logger_namespace
+)
 
 app = FastAPI()
 app.include_router(api.router)
@@ -27,24 +35,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Get connection string from env 
-APPLICATIONINSIGHTS_CONNECTION_STRING = os.getenv('APPLICATIONINSIGHTS_CONNECTION_STRING')
-
-logger = logging.getLogger(__name__)
-logger.addHandler(AzureLogHandler(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING))
+# Utiliza el logger con el namespace configurado
+logger = logging.getLogger(logger_namespace)
 logger.setLevel(logging.INFO)
 stream_handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
-logger.info('Este es un mensaje de log de ejemplo')
 
+logger.info('Este es un mensaje de log de ejemplo')
 logger.warning('logging Warning')
 logger.critical('logging Critical')
 logger.debug('logging debug')
 
 if __name__ == "__main__":
-    # import boto3
     import uvicorn
-    # Si se ejecuta en local, coge el profile aws especificado
-    uvicorn.run("app:app", host="0.0.0.0", port=5000, access_log=True,reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=5000, access_log=True, reload=True)
