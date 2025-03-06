@@ -26,10 +26,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#APPLICATIONINSIGHTS_CONNECTION_STRING = 'InstrumentationKey=cbdd090a-f423-40a3-84be-462fb96ce89f;IngestionEndpoint=https://francecentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://francecentral.livediagnostics.monitor.azure.com/;ApplicationId=522fa565-103c-494b-9eee-071767fbb2f2' # get it from env 
+# get it from env 
+APPLICATIONINSIGHTS_CONNECTION_STRING = 'InstrumentationKey=d9301d09-de74-40ef-bfc5-2fd45048f8b4;IngestionEndpoint=https://francecentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://francecentral.livediagnostics.monitor.azure.com/;ApplicationId=e8881afb-6e91-40c4-9466-2b09af946a9b'
 
 logger = logging.getLogger(__name__)
-#logger.addHandler(AzureLogHandler(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING))
+logger.addHandler(AzureLogHandler(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING))
 logger.setLevel(logging.INFO)
 stream_handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
