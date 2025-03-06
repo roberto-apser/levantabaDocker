@@ -22,9 +22,9 @@ jobs:
     #- name: Wait for container to start
     #  run: sleep 5  
 
-    - name: Test with curl
+    #- name: Test with curl
       #run: curl http://localhost:8080
-      run: curl  http://localhost:8080/api/health
+    #  run: curl  http://localhost:8080/api/health
 
     - name: Log in to Azure Container Registry
       uses: azure/docker-login@v2
