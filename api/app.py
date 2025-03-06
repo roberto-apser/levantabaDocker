@@ -2,6 +2,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import api
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 
 app = FastAPI()
 app.include_router(api.router)
@@ -24,6 +25,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+#APPLICATIONINSIGHTS_CONNECTION_STRING = 'InstrumentationKey=cbdd090a-f423-40a3-84be-462fb96ce89f;IngestionEndpoint=https://francecentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://francecentral.livediagnostics.monitor.azure.com/;ApplicationId=522fa565-103c-494b-9eee-071767fbb2f2' # get it from env 
+
+logger = logging.getLogger(__name__)
+#logger.addHandler(AzureLogHandler(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING))
+logger.setLevel(logging.INFO)
+stream_handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+stream_handler.setFormatter(formatter)
+logger.addHandler(stream_handler)
+logger.info('Este es un mensaje de log de ejemplo')
+
+logger.warning('logging Warning')
+logger.critical('logging Critical')
+logger.debug('logging debug')
 
 if __name__ == "__main__":
     # import boto3
