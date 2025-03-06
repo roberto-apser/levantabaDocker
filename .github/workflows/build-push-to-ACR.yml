@@ -19,8 +19,8 @@ jobs:
     - name: Run Docker container
       run: docker run -d -p 8080:80 ${{ secrets.AZURE_CONTAINER_REGISTRY }}/my-backend:latest
 
-    - name: Wait for container to start
-      run: sleep 5  
+    #- name: Wait for container to start
+    #  run: sleep 5  
 
     - name: Test with curl
       #run: curl http://localhost:8080
