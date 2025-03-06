@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import api
 from opencensus.ext.azure.log_exporter import AzureLogHandler
+import os
 
 app = FastAPI()
 app.include_router(api.router)
@@ -26,8 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# get it from env 
-APPLICATIONINSIGHTS_CONNECTION_STRING = 'InstrumentationKey=d9301d09-de74-40ef-bfc5-2fd45048f8b4;IngestionEndpoint=https://francecentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://francecentral.livediagnostics.monitor.azure.com/;ApplicationId=e8881afb-6e91-40c4-9466-2b09af946a9b'
+# Get connection string from env 
+APPLICATIONINSIGHTS_CONNECTION_STRING = os.getenv('APPLICATIONINSIGHTS_CONNECTION_STRING')
 
 logger = logging.getLogger(__name__)
 logger.addHandler(AzureLogHandler(connection_string=APPLICATIONINSIGHTS_CONNECTION_STRING))
